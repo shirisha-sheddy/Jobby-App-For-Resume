@@ -71,9 +71,8 @@ class Jobs extends Component {
     this.setState({
       apiStatus: apiStatusConstants.inProgress,
     })
-
     const {employeeType, minimumSalary, searchInput} = this.state
-    const apiUrl = `https://apis/ccbp.in/jobs?employment_type=${employeeType.join()}&minimum_package=${minimumSalary}&search=${searchInput}`
+    const apiUrl = `https://apis.ccbp.in/jobs?employment_type=${employeeType.join()}&minimum_package=${minimumSalary}&search=${searchInput}`
     const jwtToken = Cookies.get('jwt_token')
 
     const options = {
@@ -82,13 +81,12 @@ class Jobs extends Component {
       },
       method: 'GET',
     }
-
     const response = await fetch(apiUrl, options)
     if (response.ok === true) {
       const data = await response.json()
       const updatedJobsData = data.jobs.map(eachJob => ({
         companyLogoUrl: eachJob.company_logo_url,
-        employmentType: eachJob.employee_type,
+        employmentType: eachJob.employment_type,
         id: eachJob.id,
         jobDescription: eachJob.job_description,
         location: eachJob.location,
@@ -112,34 +110,45 @@ class Jobs extends Component {
     const renderJobsList = jobsList.length > 0
 
     return renderJobsList ? (
-      <div>
-        <ul>
+      <div className="all-jobs-container">
+        <ul className="jobs-list">
           {jobsList.map(job => (
             <JobCard jobData={job} key={job.id} />
           ))}
         </ul>
       </div>
     ) : (
-      <div>
+      <div className="no-jobs-view">
         <img
           src="https://assets.ccbp.in/frontend/react-js/no-jobs-img.png"
+          className="no-jobs-img"
           alt="no jobs"
         />
-        <h1>No Jobs Found</h1>
-        <p>We could not find any jobs, Try other filters.</p>
+        <h1 className="no-jobs-heading">No Jobs Found</h1>
+        <p className="no-jobs-description">
+          We could not find any jobs. Try other filters.
+        </p>
       </div>
     )
   }
 
   renderFailureView = () => (
-    <div>
+    <div className="jobs-error-view-container">
       <img
         src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
         alt="failure view"
+        className="jobs-failure-img"
       />
-      <h1>Oops! Something Went Wrong</h1>
-      <p>We cannot seem to find the page you are looking for</p>
-      <button type="button" data-testid="button" onClick={this.getJobs}>
+      <h1 className="jobs-failure-heading-text">Oops! Something Went Wrong</h1>
+      <p className="jobs-failure-description">
+        We cannot seem to find the page you are looking for
+      </p>
+      <button
+        type="button"
+        data-testid="button"
+        className="jobs-failure-button"
+        onClick={this.getJobs}
+      >
         Retry
       </button>
     </div>
@@ -189,12 +198,11 @@ class Jobs extends Component {
 
   render() {
     const {searchInput} = this.state
-
     return (
       <>
         <Header />
-        <div>
-          <div>
+        <div className="jobs-container">
+          <div className="jobs-content">
             <FiltersGroup
               employmentTypesList={employmentTypesList}
               salaryRangesList={salaryRangesList}
@@ -204,20 +212,22 @@ class Jobs extends Component {
               changeSalary={this.changeSalary}
               changeEmployeeList={this.changeEmployeeList}
             />
-            <div>
-              <div>
+            <div className="search-input-jobs-list-container">
+              <div className="search-input-container-desktop">
                 <input
                   type="search"
-                  placeholder="search"
+                  className="search-input-desktop"
+                  placeholder="Search"
                   onChange={this.changeSearchInput}
                   onKeyDown={this.onEnterSearchInput}
                 />
                 <button
                   type="button"
                   data-testid="searchButton"
+                  className="search-button-container-desktop"
                   onClick={this.getJobs}
                 >
-                  <BsSearch />
+                  <BsSearch className="search-icon-desktop" />
                 </button>
               </div>
               {this.renderAllJobs()}
@@ -228,5 +238,4 @@ class Jobs extends Component {
     )
   }
 }
-
 export default Jobs

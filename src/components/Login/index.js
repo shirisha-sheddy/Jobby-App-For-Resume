@@ -35,7 +35,6 @@ class Login extends Component {
       method: 'POST',
       body: JSON.stringify(userDetails),
     }
-
     const response = await fetch(apiUrl, options)
     const data = await response.json()
     if (response.ok === true) {
@@ -52,38 +51,46 @@ class Login extends Component {
       return <Redirect to="/" />
     }
     return (
-      <div>
-        <form onSubmit={this.submitForm}>
+      <div className="login-container">
+        <form className="form-container" onSubmit={this.submitForm}>
           <img
             src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
+            className="login-website-logo"
             alt="website logo"
           />
-          <div>
-            <label htmlFor="username">USERNAME</label>
+          <div className="input-container">
+            <label className="input-label" htmlFor="username">
+              USERNAME
+            </label>
             <input
               type="text"
               id="username"
               value={username}
+              className="username-input-field"
               onChange={this.onChangeUsername}
               placeholder="Username"
             />
           </div>
-          <div>
-            <label htmlFor="password">PASSWORD</label>
+          <div className="input-container">
+            <label className="input-label" htmlFor="password">
+              PASSWORD
+            </label>
             <input
               type="password"
               id="password"
               value={password}
+              className="password-input-field"
               onChange={this.onChangePassword}
               placeholder="Password"
             />
           </div>
-          <button type="submit">Login</button>
-          {showSubmitError && <p>*{errorMsg}</p>}
+          <button type="submit" className="login-button">
+            Login
+          </button>
+          {showSubmitError && <p className="error-message">*{errorMsg}</p>}
         </form>
       </div>
     )
   }
 }
-
 export default Login
